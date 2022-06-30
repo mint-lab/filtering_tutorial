@@ -50,6 +50,11 @@ if __name__ == '__main__':
         ekf.predict()
         ekf.update(obs)
 
+        if ekf.x[2] >= np.pi:
+            ekf.x[2] -= 2 * np.pi
+        elif ekf.x[2] < -np.pi:
+            ekf.x[2] += 2 * np.pi
+
         record.append([t] + true_pos.flatten().tolist() + [true_ori] + obs.flatten().tolist() + ekf.x.flatten().tolist() + ekf.P.flatten().tolist())
     record = np.array(record)
 
