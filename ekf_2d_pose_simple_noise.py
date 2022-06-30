@@ -3,57 +3,44 @@ import matplotlib.pyplot as plt
 from filterpy.kalman import ExtendedKalmanFilter
 from filterpy.stats import plot_covariance
 
-class EKFLocalizer(ExtendedKalmanFilter):
-    def __init__(self, v_noise_std=1, w_noise_std=1, gps_noise_std=1, dt=1):
-        super().__init__(dim_x=5, dim_z=2)
-        vv = v_noise_std * v_noise_std
-        vw = v_noise_std * w_noise_std
-        ww = w_noise_std * w_noise_std
-        self.motion_noise = np.array([[vv, vw], [vw, ww]])
-        self.h = lambda x: x[0:2]
-        self.H = lambda x: np.eye(2, 5)
-        self.R = gps_noise_std * gps_noise_std * np.eye(2)
-        self.dt = dt
+def fx(state, dt):
+    x, y, theta, v, w = state.flatten()
+    vt, wt = v * dt, w * dt
+    s, c = np.sin(theta + wt / 2), np.cos(theta + wt / 2)
 
-    def predict(self):
-        x, y, theta, v, w = self.x.flatten()
-        vt, wt = v * self.dt, w * self.dt
-        s, c = np.sin(theta + wt / 2), np.cos(theta + wt / 2)
+    # Predict the state
+    fx = np.array([
+        [x + vt * c],
+        [y + vt * s],
+        [theta + wt],
+        [v],
+        [w]])
+    if fx[2,0] >= np.pi:
+        fx[2,0] -= 2 * np.pi
+    elif fx[2,0] < -np.pi:
+        fx[2,0] += 2 * np.pi
+    return fx
 
-        # Predict the state
-        self.x[0] = x + vt * c
-        self.x[1] = y + vt * s
-        self.x[2] = theta + wt
-        if self.x[2] >= np.pi:
-            self.x[2] -= 2 * np.pi
-        elif self.x[2] < -np.pi:
-            self.x[2] += 2 * np.pi
-        #self.x[3] = v # Not necessary
-        #self.x[4] = w # Not necessary
+def Fx(state, dt):
+    x, y, theta, v, w = state.flatten()
+    vt, wt = v * dt, w * dt
+    s, c = np.sin(theta + wt / 2), np.cos(theta + wt / 2)
 
-        # Predict the covariance
-        self.F = np.array([
-            [1, 0, -vt * s, self.dt * c, -vt * self.dt * s / 2],
-            [0, 1,  vt * c, self.dt * s,  vt * self.dt * c / 2],
-            [0, 0,       1,           0,               self.dt],
-            [0, 0,       0,           1,                     0],
-            [0, 0,       0,           0,                     1]])
-        W = np.array([
-            [self.dt * c, -vt * self.dt * s / 2],
-            [self.dt * s,  vt * self.dt * c / 2],
-            [0, self.dt],
-            [1, 0],
-            [0, 1]])
-        self.Q = W @ self.motion_noise @ W.T
+    # Predict the covariance
+    Fx = np.array([
+        [1, 0, -vt * s, dt * c, -vt * dt * s / 2],
+        [0, 1,  vt * c, dt * s,  vt * dt * c / 2],
+        [0, 0,       1,      0,               dt],
+        [0, 0,       0,      1,                0],
+        [0, 0,       0,      0,                1]])
+    return Fx
 
-        self.P = self.F @ self.P @ self.F.T + self.Q
+def hx(state):
+    x, y, _, _, _ = state.flatten()
+    return np.array([[x], [y]])
 
-        # Save prior
-        self.x_prior = np.copy(self.x)
-        self.P_prior = np.copy(self.P)
-
-    def update(self, z):
-        super().update(z, HJacobian=self.H, Hx=self.h, R=self.R)
+def Hx(state):
+    return np.eye(2, 5)
 
 
 
@@ -66,7 +53,9 @@ if __name__ == '__main__':
     gps_noise_std = 1
 
     # Instantiate EKF for pose (and velocity) tracking
-    ekf = EKFLocalizer(v_noise_std=1, w_noise_std=0.1, gps_noise_std=gps_noise_std, dt=dt)
+    ekf = ExtendedKalmanFilter(dim_x=5, dim_z=2)
+    ekf.Q = 0.1 * np.eye(5)
+    ekf.R = gps_noise_std * gps_noise_std * np.eye(2)
 
     record = []
     for t in np.arange(0, t_end, dt):
@@ -76,8 +65,10 @@ if __name__ == '__main__':
         obs = true_pos + np.random.normal(size=true_pos.shape, scale=gps_noise_std)
 
         # Predict and update the EKF
+        ekf.F = Fx(ekf.x, dt)
+        ekf.x = fx(ekf.x, dt)
         ekf.predict()
-        ekf.update(obs)
+        ekf.update(obs, Hx, hx)
 
         record.append([t] + true_pos.flatten().tolist() + [true_ori] + obs.flatten().tolist() + ekf.x.flatten().tolist() + ekf.P.flatten().tolist())
     record = np.array(record)

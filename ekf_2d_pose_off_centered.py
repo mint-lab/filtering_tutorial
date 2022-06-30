@@ -1,59 +1,28 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from filterpy.kalman import ExtendedKalmanFilter
+from ekf_2d_pose import EKFLocalizer
 from filterpy.stats import plot_covariance
 
-class EKFLocalizer(ExtendedKalmanFilter):
-    def __init__(self, v_noise_std=1, w_noise_std=1, gps_noise_std=1, dt=1):
-        super().__init__(dim_x=5, dim_z=2)
-        vv = v_noise_std * v_noise_std
-        vw = v_noise_std * w_noise_std
-        ww = w_noise_std * w_noise_std
-        self.motion_noise = np.array([[vv, vw], [vw, ww]])
-        self.h = lambda x: x[0:2]
-        self.H = lambda x: np.eye(2, 5)
-        self.R = gps_noise_std * gps_noise_std * np.eye(2)
-        self.dt = dt
+class EKFLocalizerOC(EKFLocalizer):
+    def __init__(self, v_noise_std=1, w_noise_std=1, gps_noise_std=1, gps_offset=(0,0), dt=1):
+        super().__init__(v_noise_std, w_noise_std, gps_noise_std, dt)
+        self.h = self.hx
+        self.H = self.Hx
+        self.gps_offset_x, self.gps_offset_y = gps_offset.flatten()
 
-    def predict(self):
-        x, y, theta, v, w = self.x.flatten()
-        vt, wt = v * self.dt, w * self.dt
-        s, c = np.sin(theta + wt / 2), np.cos(theta + wt / 2)
+    def hx(self, state):
+        x, y, theta, v, w = state.flatten()
+        s, c = np.sin(theta), np.cos(theta)
+        return np.array([
+            [x + self.gps_offset_x * c - self.gps_offset_y * s],
+            [y + self.gps_offset_x * s + self.gps_offset_y * c]])
 
-        # Predict the state
-        self.x[0] = x + vt * c
-        self.x[1] = y + vt * s
-        self.x[2] = theta + wt
-        if self.x[2] >= np.pi:
-            self.x[2] -= 2 * np.pi
-        elif self.x[2] < -np.pi:
-            self.x[2] += 2 * np.pi
-        #self.x[3] = v # Not necessary
-        #self.x[4] = w # Not necessary
-
-        # Predict the covariance
-        self.F = np.array([
-            [1, 0, -vt * s, self.dt * c, -vt * self.dt * s / 2],
-            [0, 1,  vt * c, self.dt * s,  vt * self.dt * c / 2],
-            [0, 0,       1,           0,               self.dt],
-            [0, 0,       0,           1,                     0],
-            [0, 0,       0,           0,                     1]])
-        W = np.array([
-            [self.dt * c, -vt * self.dt * s / 2],
-            [self.dt * s,  vt * self.dt * c / 2],
-            [0, self.dt],
-            [1, 0],
-            [0, 1]])
-        self.Q = W @ self.motion_noise @ W.T
-
-        self.P = self.F @ self.P @ self.F.T + self.Q
-
-        # Save prior
-        self.x_prior = np.copy(self.x)
-        self.P_prior = np.copy(self.P)
-
-    def update(self, z):
-        super().update(z, HJacobian=self.H, Hx=self.h, R=self.R)
+    def Hx(self, state):
+        x, y, theta, v, w = state.flatten()
+        s, c = np.sin(theta), np.cos(theta)
+        return np.array([
+            [1, 0, -self.gps_offset_x * s - self.gps_offset_y * c, 0, 0],
+            [0, 1,  self.gps_offset_x * c - self.gps_offset_y * s, 0, 0]])
 
 
 
@@ -64,16 +33,18 @@ if __name__ == '__main__':
     get_true_position = lambda t: r * np.array([[np.cos(w * t)], [np.sin(w * t)]]) # Circular motion
     get_true_heading  = lambda t: np.arctan2(np.cos(w * t), -np.sin(w * t))
     gps_noise_std = 1
+    gps_offset = np.array([[1], [0]])
 
     # Instantiate EKF for pose (and velocity) tracking
-    ekf = EKFLocalizer(v_noise_std=1, w_noise_std=0.1, gps_noise_std=gps_noise_std, dt=dt)
+    ekf = EKFLocalizerOC(v_noise_std=1, w_noise_std=0.1, gps_noise_std=gps_noise_std, gps_offset=gps_offset, dt=dt)
 
     record = []
     for t in np.arange(0, t_end, dt):
-        # Simulate position observation with additive Gaussian noise
+        # Simulate position observation with off-centered GPS and additive Gaussian noise
         true_pos = get_true_position(t)
         true_ori = get_true_heading(t)
-        obs = true_pos + np.random.normal(size=true_pos.shape, scale=gps_noise_std)
+        R = np.array([[np.cos(true_ori), -np.sin(true_ori)], [np.sin(true_ori), np.cos(true_ori)]])
+        obs = true_pos + R @ gps_offset + np.random.normal(size=true_pos.shape, scale=gps_noise_std)
 
         # Predict and update the EKF
         ekf.predict()
