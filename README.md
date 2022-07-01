@@ -9,12 +9,12 @@
   * [2D pose estimation](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py)
     * State variable: $\mathbf{x} = [x, y, \theta, v, w]^\top$
     * State transition function: Constant velocity model ($\Delta$: time interval)
-      $\mathbf{x}_{t+1} = f(\mathbf{x}_t) = \begin{bmatrix} x_t + v_t \Delta \cos(\theta + w_t \Delta / 2) \\ y_t + v_t \Delta \sin(\theta + w_t \Delta / 2) \\ \theta_t + w_t \Delta \\ v_t \\ w_t \end{bmatrix}$
+      $\mathbf{x}_{t+1} = f(\mathbf{x}_t) = \begin{bmatrix} x_t + v_t \Delta \cos(\theta + w_t \Delta / 2) \\\ y_t + v_t \Delta \sin(\theta + w_t \Delta / 2) \\\ \theta_t + w_t \Delta \\\ v_t \\\ w_t \end{bmatrix}$
     * State transition noise: $Q = \mathrm{diag}(\sigma^2_x, \sigma^2_y, \sigma^2_\theta, \sigma^2_v, \sigma^2_w)$ 
     * Observation function: $\mathbf{z} = h(\mathbf{x}) = [x, y]^\top$ (similar to GPS)
   * [2D pose estimation with better transition noise](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose.py)
     * Its _state variable_, _state transition function_, and _observation function_ are same with the above example.
-    * State transition noise: $Q = W^\top M W$ where $Q = \begin{bmatrix} \frac{\partial f}{\partial v} & \frac{\partial f}{\partial w}\end{bmatrix}$ and $M = \begin{bmatrix} \sigma^2_v & 0 \\ 0 & \sigma^2_w \end{bmatrix}$
+    * State transition noise: $Q = W^\top M W$ where $Q = \begin{bmatrix} \frac{\partial f}{\partial v} & \frac{\partial f}{\partial w}\end{bmatrix}$ and $M = \begin{bmatrix} \sigma^2_v & 0 \\\ 0 & \sigma^2_w \end{bmatrix}$
   * [2D pose estimation with off-centered GPS](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_off_centered.py)
     * Its _state variable_, _state transition function_, and _state transition noise_ are same with the above example.
     * Observation function [[Choi20]](http://doi.org/10.1109/TITS.2019.2915108): Off-centered GPS ($o_x$ and $o_y$ are frontal and lateral offset of the GPS.)
