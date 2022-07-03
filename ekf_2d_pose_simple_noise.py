@@ -1,7 +1,6 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from filterpy.kalman import ExtendedKalmanFilter
-from filterpy.stats import plot_covariance
+from ekf_2d_pose import plot_results
 
 def fx(state, dt):
     x, y, theta, v, w = state.flatten()
@@ -43,67 +42,34 @@ if __name__ == '__main__':
     gps_noise_std = 1
 
     # Instantiate EKF for pose (and velocity) tracking
-    ekf = ExtendedKalmanFilter(dim_x=5, dim_z=2)
-    ekf.Q = 0.1 * np.eye(5)
-    ekf.R = gps_noise_std * gps_noise_std * np.eye(2)
+    localizer_name = 'EKF+SimpleNoise'
+    localizer = ExtendedKalmanFilter(dim_x=5, dim_z=2)
+    localizer.Q = 0.1 * np.eye(5)
+    localizer.R = gps_noise_std * gps_noise_std * np.eye(2)
 
-    record = []
+    truth, state, obser, covar = [], [], [], []
     for t in np.arange(0, t_end, dt):
         # Simulate position observation with additive Gaussian noise
         true_pos = get_true_position(t)
         true_ori = get_true_heading(t)
-        obs = true_pos + np.random.normal(size=true_pos.shape, scale=gps_noise_std)
+        gps_data = true_pos + np.random.normal(size=true_pos.shape, scale=gps_noise_std)
 
         # Predict and update the EKF
-        ekf.F = Fx(ekf.x, dt)
-        ekf.x = fx(ekf.x, dt)
-        ekf.predict()
-        ekf.update(obs, Hx, hx)
+        localizer.F = Fx(localizer.x, dt)
+        localizer.x = fx(localizer.x, dt)
+        localizer.predict()
+        localizer.update(gps_data, Hx, hx)
 
-        if ekf.x[2] >= np.pi:
-            ekf.x[2] -= 2 * np.pi
-        elif ekf.x[2] < -np.pi:
-            ekf.x[2] += 2 * np.pi
+        if localizer.x[2] >= np.pi:
+            localizer.x[2] -= 2 * np.pi
+        elif localizer.x[2] < -np.pi:
+            localizer.x[2] += 2 * np.pi
 
-        record.append([t] + true_pos.flatten().tolist() + [true_ori] + obs.flatten().tolist() + ekf.x.flatten().tolist() + ekf.P.flatten().tolist())
-    record = np.array(record)
+        # Record true state, observation, estimated state, and its covariance
+        truth.append([t] + true_pos.flatten().tolist() + [true_ori, r * w, w])
+        state.append([t] + localizer.x.flatten().tolist())
+        obser.append([t] + gps_data.flatten().tolist())
+        covar.append([t] + localizer.P.flatten().tolist())
 
     # Visualize the results
-    plt.figure()
-    plt.plot(record[:,1], record[:,2], 'r-', label='Truth')
-    plt.plot(record[:,4], record[:,5], 'b+', label='Observation')
-    plt.plot(record[:,6], record[:,7], 'g-', label='EKF')
-    for i, line in enumerate(record):
-        if i % 5 == 0:
-            plot_covariance(line[6:8], line[11:].reshape(5, 5)[0:2,0:2], interval=0.98, edgecolor='g', alpha=0.5)
-    plt.axis('equal')
-    plt.xlabel('X')
-    plt.ylabel('Y')
-    plt.grid()
-    plt.legend()
-
-    plt.figure()
-    plt.plot(record[:,0], record[:,1], 'r-', label='Truth')
-    plt.plot(record[:,0], record[:,4], 'b+', label='Observation')
-    plt.plot(record[:,0], record[:,6], 'g-', label='EKF')
-    plt.xlabel('Time')
-    plt.ylabel('X')
-    plt.grid()
-    plt.legend()
-
-    plt.figure()
-    plt.plot(record[:,0], record[:,2], 'r-', label='Truth')
-    plt.plot(record[:,0], record[:,5], 'b+', label='Observation')
-    plt.plot(record[:,0], record[:,7], 'g-', label='EKF')
-    plt.xlabel('Time')
-    plt.ylabel('Y')
-    plt.grid()
-    plt.legend()
-
-    plt.figure()
-    plt.plot(record[:,0], record[:,3] * 180 / np.pi, 'r-', label='Truth')
-    plt.plot(record[:,0], record[:,8] * 180 / np.pi, 'g-', label='EKF')
-    plt.xlabel('Time')
-    plt.ylabel(r'Orientaiton $\theta$ [deg]')
-    plt.grid()
-    plt.legend()
+    plot_results(localizer_name, truth, state, obser, covar)
