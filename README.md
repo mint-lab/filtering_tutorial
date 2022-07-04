@@ -2,35 +2,43 @@
 * :pencil: The following five definitions are important to design and analyze Bayesian filtering. Please refer my examples in the view of the five definitions, their implementation, and results.
 
 * **Kalman filter** [[Wikipedia]](https://en.wikipedia.org/wiki/Kalman_filter)
-  * [2D position estimation](https://github.com/mint-lab/filtering_tutorial/blob/master/kf_2d_position.py)
+  * [2D position estimation](https://github.com/mint-lab/filtering_tutorial/blob/master/kf_2d_position.py) (without class inheritance)
     * State variable: $\mathbf{x} = [x, y]^\top$
-    * State transition function: $\mathbf{x}_{t+1} = f(\mathbf{x}_t) = \mathbf{x}_t$
+    * State transition function: $\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_k) = \mathbf{x}_k$ (control input: $\mathbf{u}_k = \empty$) 
     * State transition noise: $Q = \mathrm{diag}(\sigma^2_x, \sigma^2_y)$
-    * Observation function: $\mathbf{z} = h(\mathbf{x}) = [x, y]^\top$ (similar to GPS)
+    * Observation function: $\mathbf{z} = [x_{GPS}, y_{GPS}]^\top = h(\mathbf{x}) = [x, y]^\top$
     * Observation noise: $R = \mathrm{diag}(\sigma^2_{GPS}, \sigma^2_{GPS})$
   
 * **EKF** [[Wikipedia]](https://en.wikipedia.org/wiki/Extended_Kalman_filter)
-  * [2D pose estimation with simple transition noise](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py)
+  * [2D pose estimation with simple transition noise](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py) (without class inheritance)
     * State variable: $\mathbf{x} = [x, y, \theta, v, w]^\top$
-    * State transition function: Constant velocity model ($\Delta$: time interval)
-      $$\mathbf{x}_{t+1} = f(\mathbf{x}_t) = \begin{bmatrix} x_t + v_t \Delta \cos(\theta + w_t \Delta / 2) \\\ y_t + v_t \Delta \sin(\theta + w_t \Delta / 2) \\\ \theta_t + w_t \Delta \\\ v_t \\\ w_t \end{bmatrix}$$
+    * State transition function: Constant velocity model (control input: $\mathbf{u}_k = \empty$, time interval: $t$)
+      $$\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_k) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\\ \theta_k + w_k t \\\ v_k \\\ w_k \end{bmatrix}$$
     * State transition noise: $Q = \mathrm{diag}(\sigma^2_x, \sigma^2_y, \sigma^2_\theta, \sigma^2_v, \sigma^2_w)$ 
-    * Observation function: $\mathbf{z} = h(\mathbf{x}) = [x, y]^\top$ (similar to GPS)
+    * Observation function: $\mathbf{z} = [x_{GPS}, y_{GPS}]^\top = h(\mathbf{x}) = [x, y]^\top$
     * Observation noise: $R = \mathrm{diag}(\sigma^2_{GPS}, \sigma^2_{GPS})$
-  * [2D pose estimation](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose.py)
-    * Its _state variable_, _state transition function_, _observation function_, and _observation noise_ are same with the above example.
-    * State transition noise: $Q = W^\top M W$ where $W = \begin{bmatrix} \frac{\partial f}{\partial v} & \frac{\partial f}{\partial w}\end{bmatrix}$ and $M = \begin{bmatrix} \sigma^2_v & 0 \\\ 0 & \sigma^2_w \end{bmatrix}$
+  * [2D pose estimation](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose.py) (using class inheritance)
+    * Its _state variable_, _state transition function_, _observation function_, and _observation noise_ are same with [the above example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
+    * State transition noise: $Q = W^\top M W$ where $W = \begin{bmatrix} \frac{\partial f}{\partial v} & \frac{\partial f}{\partial w} \end{bmatrix}$ and $M = \begin{bmatrix} \sigma^2_v & 0 \\\ 0 & \sigma^2_w \end{bmatrix}$
+  * [2D pose estimation with odometry](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_odometry.py)
+    * Its _state transition noise_, _observation function_, and _observation noise_ are same with [the above example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
+    * State variable: $\mathbf{x} = [x, y, \theta]^\top$
+    * State transition function: Constant velocity model (control input: $\mathbf{u}_k = [v_k, w_k]^\top$, time interval: $t$)
+      $$\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_k) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\\ \theta_k + w_k t \end{bmatrix}$$
   * [2D pose estimation with off-centered GPS](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_off_centered.py)
-    * Its _state variable_, _state transition function_, _state transition noise_, and _observation noise_ are same with the above example.
+    * Its _state variable_, _state transition function_, _state transition noise_, and _observation noise_ are same with [the above example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
     * Observation function [[Choi20]](http://doi.org/10.1109/TITS.2019.2915108): Off-centered GPS ($o_x$ and $o_y$ are frontal and lateral offset of the GPS.)
-      $$\mathbf{z} = h(\mathbf{x}) = \begin{bmatrix} x + o_x \cos \theta - o_y \sin \theta \\\ y + o_x \sin \theta + o_y \cos \theta \end{bmatrix}$$
+      $$\mathbf{z} = \begin{bmatrix} x_{GPS} \\\ y_{GPS} \end{bmatrix} = h(\mathbf{x}) = \begin{bmatrix} x + o_x \cos \theta - o_y \sin \theta \\\ y + o_x \sin \theta + o_y \cos \theta \end{bmatrix}$$
   
 * **UKF** [[Wikipedia]](https://en.wikipedia.org/wiki/Kalman_filter#Unscented_Kalman_filter)
-  * [2D pose estimation with simple transition noise](https://github.com/mint-lab/filtering_tutorial/blob/master/ukf_2d_pose_simple_noise.py) (similar its [EKF example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py))
-  * [2D pose estimation](https://github.com/mint-lab/filtering_tutorial/blob/master/ukf_2d_pose.py) (similar to its [EKF example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose.py))
-
+  * [2D pose estimation with simple transition noise](https://github.com/mint-lab/filtering_tutorial/blob/master/ukf_2d_pose_simple_noise.py)
+    * Its five definitions (and also implementation style) are same with [its corresponding EKF example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
+  * [2D pose estimation](https://github.com/mint-lab/filtering_tutorial/blob/master/ukf_2d_pose.py)
+    * Its five definitions (and also implementation style) are same with [its corresponding EKF example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
+  
 * **Particle filter** [[Wikipedia]](https://en.wikipedia.org/wiki/Particle_filter)
-  * [2D pose estimation](https://github.com/mint-lab/filtering_tutorial/blob/master/ukf_2d_pose.py) (similar to its [EKF example](https://github.com/mint-lab/filtering_tutorial/blob/master/pf_2d_pose.py))
+  * [2D pose estimation](https://github.com/mint-lab/filtering_tutorial/blob/master/ukf_2d_pose.py)
+    * Its five definitions (and also implementation style) are same with [its corresponding EKF example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
 
 
 ### References
