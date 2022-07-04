@@ -5,10 +5,7 @@ from ekf_2d_pose import plot_results
 class EKFLocalizerOD(ExtendedKalmanFilter):
     def __init__(self, v_noise_std=1, w_noise_std=1, gps_noise_std=1, dt=1):
         super().__init__(dim_x=3, dim_z=2)
-        vv = v_noise_std * v_noise_std
-        vw = v_noise_std * w_noise_std
-        ww = w_noise_std * w_noise_std
-        self.motion_noise = np.array([[vv, vw], [vw, ww]])
+        self.motion_noise = np.array([[v_noise_std * v_noise_std, 0], [0, w_noise_std * w_noise_std]])
         self.h = lambda x: x[0:2]
         self.H = lambda x: np.eye(2, 3)
         self.R = gps_noise_std * gps_noise_std * np.eye(2)
@@ -56,7 +53,7 @@ if __name__ == '__main__':
 
     # Instantiate EKF for pose tracking
     localizer_name = 'EKF+Odometry'
-    localizer = EKFLocalizerOD(v_noise_std=1, w_noise_std=0.2, gps_noise_std=gps_noise_std, dt=dt)
+    localizer = EKFLocalizerOD(v_noise_std=0.2, w_noise_std=0.2, gps_noise_std=gps_noise_std, dt=dt)
 
     truth, state, obser, covar = [], [], [], []
     for t in np.arange(0, t_end, dt):
@@ -83,3 +80,4 @@ if __name__ == '__main__':
 
     # Visualize the results
     plot_results(localizer_name, truth, state, obser, covar)
+    plt.show()

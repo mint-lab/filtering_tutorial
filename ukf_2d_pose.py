@@ -6,10 +6,7 @@ class UKFLocalizer(UnscentedKalmanFilter):
     def __init__(self, v_noise_std=1, w_noise_std=1, gps_noise_std=1, dt=1):
         self.sigma_points = MerweScaledSigmaPoints(5, alpha=.1, beta=2., kappa=-1)
         super().__init__(dim_x=5, dim_z=2, dt=dt, fx=self.fx, hx=self.hx, points=self.sigma_points)
-        vv = v_noise_std * v_noise_std
-        vw = v_noise_std * w_noise_std
-        ww = w_noise_std * w_noise_std
-        self.motion_noise = np.array([[vv, vw], [vw, ww]])
+        self.motion_noise = np.array([[v_noise_std * v_noise_std, 0], [0, w_noise_std * w_noise_std]])
         self.R = gps_noise_std * gps_noise_std * np.eye(2)
         self.dt = dt
 
@@ -58,7 +55,7 @@ if __name__ == '__main__':
 
     # Instantiate UKF for pose (and velocity) tracking
     localizer_name = 'UKF'
-    localizer = UKFLocalizer(v_noise_std=1, w_noise_std=0.1, gps_noise_std=gps_noise_std, dt=dt)
+    localizer = UKFLocalizer(v_noise_std=0.1, w_noise_std=0.1, gps_noise_std=gps_noise_std, dt=dt)
 
     truth, state, obser, covar = [], [], [], []
     for t in np.arange(0, t_end, dt):
@@ -84,3 +81,4 @@ if __name__ == '__main__':
 
     # Visualize the results
     plot_results(localizer_name, truth, state, obser, covar)
+    plt.show()

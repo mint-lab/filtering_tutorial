@@ -6,10 +6,7 @@ from filterpy.stats import plot_covariance
 class EKFLocalizer(ExtendedKalmanFilter):
     def __init__(self, v_noise_std=1, w_noise_std=1, gps_noise_std=1, dt=1):
         super().__init__(dim_x=5, dim_z=2)
-        vv = v_noise_std * v_noise_std
-        vw = v_noise_std * w_noise_std
-        ww = w_noise_std * w_noise_std
-        self.motion_noise = np.array([[vv, vw], [vw, ww]])
+        self.motion_noise = np.array([[v_noise_std * v_noise_std, 0], [0, w_noise_std * w_noise_std]])
         self.h = lambda x: x[0:2]
         self.H = lambda x: np.eye(2, 5)
         self.R = gps_noise_std * gps_noise_std * np.eye(2)
@@ -53,9 +50,9 @@ class EKFLocalizer(ExtendedKalmanFilter):
 def plot_results(localizer_name, truth, state, obser=None, covar=None, covar_step=5, covar_sigma=0.98): # 0.98 means 2 x sigma.
     truth = np.array(truth)
     state = np.array(state)
-    if obser:
+    if obser is not None:
         obser = np.array(obser)
-    if covar:
+    if covar is not None:
         covar = np.array(covar)
     state_dim = len(state[0]) - 1
 
@@ -133,7 +130,7 @@ if __name__ == '__main__':
 
     # Instantiate EKF for pose (and velocity) tracking
     localizer_name = 'EKF'
-    localizer = EKFLocalizer(v_noise_std=1, w_noise_std=0.1, gps_noise_std=gps_noise_std, dt=dt)
+    localizer = EKFLocalizer(v_noise_std=0.1, w_noise_std=0.1, gps_noise_std=gps_noise_std, dt=dt)
 
     truth, state, obser, covar = [], [], [], []
     for t in np.arange(0, t_end, dt):
@@ -159,3 +156,4 @@ if __name__ == '__main__':
 
     # Visualize the results
     plot_results(localizer_name, truth, state, obser, covar)
+    plt.show()

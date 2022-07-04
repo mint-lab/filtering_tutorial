@@ -58,3 +58,5 @@ if __name__ == '__main__':
     plt.ylabel('Y')
     plt.grid()
     plt.legend()
+
+    plt.show()

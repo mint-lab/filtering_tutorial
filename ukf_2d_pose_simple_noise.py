@@ -58,3 +58,4 @@ if __name__ == '__main__':
 
     # Visualize the results
     plot_results(localizer_name, truth, state, obser, covar)
+    plt.show()

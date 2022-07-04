@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     # Instantiate EKF for pose (and velocity) tracking
     localizer_name = 'EKF+OffCentered'
-    localizer = EKFLocalizerOC(v_noise_std=1, w_noise_std=0.1, gps_noise_std=gps_noise_std, gps_offset=gps_offset, dt=dt)
+    localizer = EKFLocalizerOC(v_noise_std=0.1, w_noise_std=0.1, gps_noise_std=gps_noise_std, gps_offset=gps_offset, dt=dt)
 
     truth, state, obser, covar = [], [], [], []
     for t in np.arange(0, t_end, dt):
@@ -62,3 +62,4 @@ if __name__ == '__main__':
 
     # Visualize the results
     plot_results(localizer_name, truth, state, obser, covar)
+    plt.show()
