@@ -4,7 +4,7 @@
 * **Kalman filter** [[Wikipedia]](https://en.wikipedia.org/wiki/Kalman_filter)
   * [2D position estimation](https://github.com/mint-lab/filtering_tutorial/blob/master/kf_2d_position.py) (without class inheritance)
     * State variable: $\mathbf{x} = [x, y]^\top$
-    * State transition function: $\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_k) = \mathbf{x}_k$  (control input: $\mathbf{u}_k = []$) 
+    * State transition function: $\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_k) = \mathbf{x}_k$ (control input: $\mathbf{u}_k = \empty$)
     * State transition noise: $Q = \mathrm{diag}(\sigma^2_x, \sigma^2_y)$
     * Observation function: $\mathbf{z} = [x_{GPS}, y_{GPS}]^\top = h(\mathbf{x}) = [x, y]^\top$
     * Observation noise: $R = \mathrm{diag}(\sigma^2_{GPS}, \sigma^2_{GPS})$
