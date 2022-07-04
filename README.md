@@ -16,7 +16,7 @@
     * State variable: $\mathbf{x} = [x, y, \theta, v, w]^\top$
     * State transition function: Constant velocity model (time interval: $t$)
       * Control input: $\mathbf{u}_k = [ ]$
-      $$\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_k) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\\ \theta_k + w_k t \\\ v_k \\\ w_k \end{bmatrix}$$
+        $$\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_k) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\\ \theta_k + w_k t \\\ v_k \\\ w_k \end{bmatrix}$$
     * State transition noise: $Q = \mathrm{diag}(\sigma^2_x, \sigma^2_y, \sigma^2_\theta, \sigma^2_v, \sigma^2_w)$ 
     * Observation function: $\mathbf{z} = h(\mathbf{x}) = [x, y]^\top$
       * Observation: $\mathbf{z} = [x_{GPS}, y_{GPS}]^\top$
@@ -29,12 +29,12 @@
     * State variable: $\mathbf{x} = [x, y, \theta]^\top$
     * State transition function: Constant velocity model (time interval: $t$)
       * Control input: $\mathbf{u}_k = [v_k, w_k]^\top$
-      $$\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_k) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\\ \theta_k + w_k t \end{bmatrix}$$
+        $$\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_k) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\\ \theta_k + w_k t \end{bmatrix}$$
   * [2D pose estimation with off-centered GPS](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_off_centered.py)
     * Its _state variable_, _state transition function_, _state transition noise_, and _observation noise_ are same with [the above example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
     * Observation function [[Choi20]](http://doi.org/10.1109/TITS.2019.2915108): Off-centered GPS ($o_x$ and $o_y$ are frontal and lateral offset of the GPS.)
       * Observation: $\mathbf{z} = [x_{GPS}, y_{GPS}]^\top$
-      $$\mathbf{z} = h(\mathbf{x}) = \begin{bmatrix} x + o_x \cos \theta - o_y \sin \theta \\\ y + o_x \sin \theta + o_y \cos \theta \end{bmatrix}$$
+        $$\mathbf{z} = h(\mathbf{x}) = \begin{bmatrix} x + o_x \cos \theta - o_y \sin \theta \\\ y + o_x \sin \theta + o_y \cos \theta \end{bmatrix}$$
   
 * **UKF** [[Wikipedia]](https://en.wikipedia.org/wiki/Kalman_filter#Unscented_Kalman_filter)
   * [2D pose estimation with simple transition noise](https://github.com/mint-lab/filtering_tutorial/blob/master/ukf_2d_pose_simple_noise.py)
