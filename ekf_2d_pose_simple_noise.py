@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from filterpy.kalman import ExtendedKalmanFilter
 from ekf_2d_pose import plot_results
 

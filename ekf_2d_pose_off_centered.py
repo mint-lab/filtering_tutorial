@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from ekf_2d_pose import EKFLocalizer, plot_results
 
 class EKFLocalizerOC(EKFLocalizer):

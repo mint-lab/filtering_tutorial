@@ -1,3 +1,9 @@
+## A Short Tutorial on Bayesian Filtering
+### Introduction
+* This short tutorial aims to make readers understand and utilize Bayesian filtering, especially with applications to localization and pose estimation.
+
+
+
 ### Code Examples
 * :pencil: The following five definitions are important to design and analyze Bayesian filtering. Please refer my examples in the view of the five definitions, their implementation, and results.
 
@@ -16,7 +22,7 @@
     * State variable: $\mathbf{x} = [x, y, \theta, v, w]^\top$
     * State transition function: Constant velocity model (time interval: $t$)
       $$\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_k) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\\ \theta_k + w_k t \\\ v_k \\\ w_k \end{bmatrix}$$
-      * Control input is $\mathbf{u}_k = [ ]$
+      * Control input: $\mathbf{u}_k = [ ]$
     * State transition noise: $Q = \mathrm{diag}(\sigma^2_x, \sigma^2_y, \sigma^2_\theta, \sigma^2_v, \sigma^2_w)$ 
     * Observation function: $\mathbf{z} = h(\mathbf{x}) = [x, y]^\top$
       * Observation: $\mathbf{z} = [x_{GPS}, y_{GPS}]^\top$
@@ -42,15 +48,16 @@
     * Its five definitions (and also implementation style) are same with [its corresponding EKF example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
   
 * **Particle filter** [[Wikipedia]](https://en.wikipedia.org/wiki/Particle_filter)
-  * [2D pose estimation](https://github.com/mint-lab/filtering_tutorial/blob/master/ukf_2d_pose.py)
+  * [2D pose estimation](https://github.com/mint-lab/filtering_tutorial/blob/master/pf_2d_pose.py)
     * Its five definitions (and also implementation style) are same with [its corresponding EKF example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
+
 
 
 ### References
 * [FilterPy Documentation](https://filterpy.readthedocs.io/en/latest/): FilterPy API and examples
-  * Useful parts: [Kalman filter](https://filterpy.readthedocs.io/en/latest/kalman/KalmanFilter.html), [EKF](https://filterpy.readthedocs.io/en/latest/kalman/ExtendedKalmanFilter.html), [UKF](https://filterpy.readthedocs.io/en/latest/kalman/UnscentedKalmanFilter.html)
+  * Bookmarks: [Kalman filter](https://filterpy.readthedocs.io/en/latest/kalman/KalmanFilter.html), [EKF](https://filterpy.readthedocs.io/en/latest/kalman/ExtendedKalmanFilter.html), [UKF](https://filterpy.readthedocs.io/en/latest/kalman/UnscentedKalmanFilter.html), [resampling](https://filterpy.readthedocs.io/en/latest/monte_carlo/resampling.html) (for particle filter)
 * [Kalman and Bayesian Filters in Python](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python): A great introduction on Bayesian filtering with FilterPy
-  * Useful parts: [Table of Contents](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/blob/master/table_of_contents.ipynb), [EKF](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/blob/master/11-Extended-Kalman-Filters.ipynb), [UKF](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/blob/master/10-Unscented-Kalman-Filter.ipynb), [particle filter](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/blob/master/12-Particle-Filters.ipynb)
+  * Bookmarks: [Table of Contents](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/blob/master/table_of_contents.ipynb), [Kalman filter](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/blob/master/08-Designing-Kalman-Filters.ipynb), [EKF](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/blob/master/11-Extended-Kalman-Filters.ipynb), [UKF](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/blob/master/10-Unscented-Kalman-Filter.ipynb), [particle filter](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/blob/master/12-Particle-Filters.ipynb)
 * Particle filter
   * [pfilter](https://github.com/johnhw/pfilter), John Williamson
   * [Monte Carlo Particle Filter for Localization](https://github.com/p16i/particle-filter), Pattarawat Chormai
