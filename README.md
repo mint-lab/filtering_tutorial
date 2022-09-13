@@ -67,5 +67,5 @@
 
 
 ### Acknowledgement
-_SensorPy_ was supported by the following R&D projects in Korea.
+This tutorial was supported by the following R&D projects in Korea.
 *  AI-based Localization and Path Planning on 3D Building Surfaces (granted by [MSIT](https://www.msit.go.kr/)/[NRF](https://www.nrf.re.kr/), September 2021 - February 2023)
