@@ -63,3 +63,9 @@
   * [Monte Carlo Particle Filter for Localization](https://github.com/p16i/particle-filter), Pattarawat Chormai
   * [particle_filter_demo](https://github.com/mjl/particle_filter_demo), Martin J. Laubach
   * [Particle Filter for _Turtle_ Localization](https://github.com/leimao/Particle-Filter), Lei Mao
+
+
+
+### Acknowledgement
+_SensorPy_ was supported by the following R&D projects in Korea.
+*  AI-based Localization and Path Planning on 3D Building Surfaces (granted by [MSIT](https://www.msit.go.kr/)/[NRF](https://www.nrf.re.kr/), September 2021 - February 2023)
