@@ -39,7 +39,7 @@
   * [2D pose estimation with off-centered GPS](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_off_centered.py)
     * Its _state variable_, _state transition function_, _state transition noise_, and _observation noise_ are same with [the above example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
     * Observation function [[Choi20]](http://doi.org/10.1109/TITS.2019.2915108): Off-centered GPS ($o_x$ and $o_y$ are frontal and lateral offset of the GPS.)<p/>
-      $$\mathbf{z} = \begin{bmatrix} x_{GPS} \\ y_{GPS} \end{bmatrix} = h(\mathbf{x}) = \begin{bmatrix} x + o_x \cos \theta - o_y \sin \theta \\ y + o_x \sin \theta + o_y \cos \theta \end{bmatrix}$$
+      $$\mathbf{z} = \begin{bmatrix} x_{GPS} \\\\ y_{GPS} \end{bmatrix} = h(\mathbf{x}) = \begin{bmatrix} x + o_x \cos \theta - o_y \sin \theta \\\\ y + o_x \sin \theta + o_y \cos \theta \end{bmatrix}$$
   
 * **UKF** [[Wikipedia]](https://en.wikipedia.org/wiki/Kalman_filter#Unscented_Kalman_filter)
   * [2D pose estimation with simple transition noise](https://github.com/mint-lab/filtering_tutorial/blob/master/ukf_2d_pose_simple_noise.py)
