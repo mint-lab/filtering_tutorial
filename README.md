@@ -29,7 +29,8 @@
     * Observation noise: $R = \mathrm{diag}(\sigma^2_{GPS}, \sigma^2_{GPS})$
   * [2D pose estimation](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose.py) (using class inheritance)
     * Its _state variable_, _state transition function_, _observation function_, and _observation noise_ are same with [the above example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
-    * State transition noise: $Q = W^\top M W$ where $W = \begin{bmatrix} \frac{\partial f}{\partial v} & \frac{\partial f}{\partial w} \end{bmatrix}$ and $M = \begin{bmatrix} \sigma^2_v & 0 \\ 0 & \sigma^2_w \end{bmatrix}$
+    * State transition noise: $Q = W^\top M W$ where <p/>
+      $W = \begin{bmatrix} \frac{\partial f}{\partial v} & \frac{\partial f}{\partial w} \end{bmatrix}$ and $M = \begin{bmatrix} \sigma^2_v & 0 \\ 0 & \sigma^2_w \end{bmatrix}$
   * [2D pose estimation with odometry](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_odometry.py)
     * Its _state transition noise_, _observation function_, and _observation noise_ are same with [the above example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
     * State variable: $\mathbf{x} = [x, y, \theta]^\top$
@@ -38,7 +39,7 @@
       * Control input: $\mathbf{u}_k = [v_k, w_k]^\top$
   * [2D pose estimation with off-centered GPS](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_off_centered.py)
     * Its _state variable_, _state transition function_, _state transition noise_, and _observation noise_ are same with [the above example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
-    * Observation function [[Choi20]](http://doi.org/10.1109/TITS.2019.2915108): Off-centered GPS ($o_x$ and $o_y$ are frontal and lateral offset of the GPS.)
+    * Observation function [[Choi20]](http://doi.org/10.1109/TITS.2019.2915108): Off-centered GPS ($o_x$ and $o_y$ are frontal and lateral offset of the GPS.)<p/>
       $$\mathbf{z} = \begin{bmatrix} x_{GPS} \\ y_{GPS} \end{bmatrix} = h(\mathbf{x}) = \begin{bmatrix} x + o_x \cos \theta - o_y \sin \theta \\ y + o_x \sin \theta + o_y \cos \theta \end{bmatrix}$$
   
 * **UKF** [[Wikipedia]](https://en.wikipedia.org/wiki/Kalman_filter#Unscented_Kalman_filter)
