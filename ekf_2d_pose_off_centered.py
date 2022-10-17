@@ -10,14 +10,14 @@ class EKFLocalizerOC(EKFLocalizer):
         self.gps_offset_x, self.gps_offset_y = gps_offset.flatten()
 
     def hx(self, state):
-        x, y, theta, v, w = state.flatten()
+        x, y, theta, *_ = state.flatten()
         s, c = np.sin(theta), np.cos(theta)
         return np.array([
             [x + self.gps_offset_x * c - self.gps_offset_y * s],
             [y + self.gps_offset_x * s + self.gps_offset_y * c]])
 
     def Hx(self, state):
-        x, y, theta, v, w = state.flatten()
+        x, y, theta, *_ = state.flatten()
         s, c = np.sin(theta), np.cos(theta)
         return np.array([
             [1, 0, -self.gps_offset_x * s - self.gps_offset_y * c, 0, 0],
