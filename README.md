@@ -20,7 +20,7 @@
 * **EKF** [[Wikipedia]](https://en.wikipedia.org/wiki/Extended_Kalman_filter)
   * [2D pose estimation with simple transition noise](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py) (without class inheritance)
     * State variable: $\mathbf{x} = [x, y, \theta, v, w]^\top$
-    * State transition function: Constant velocity model (time interval: $t$)<p>
+    * State transition function: Constant velocity model (time interval: $t$)<p/>
       $$\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_k) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\\\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\\\ \theta_k + w_k t \\\\ v_k \\\\ w_k \end{bmatrix}$$
       * Control input: $\mathbf{u}_k = [ ]$
     * State transition noise: $Q = \mathrm{diag}(\sigma^2_x, \sigma^2_y, \sigma^2_\theta, \sigma^2_v, \sigma^2_w)$ 
@@ -33,8 +33,8 @@
   * [2D pose estimation with odometry](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_odometry.py)
     * Its _state transition noise_, _observation function_, and _observation noise_ are same with [the above example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
     * State variable: $\mathbf{x} = [x, y, \theta]^\top$
-    * State transition function: Constant velocity model (time interval: $t$)
-      $$\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_k) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\ \theta_k + w_k t \end{bmatrix}$$
+    * State transition function: Constant velocity model (time interval: $t$)<p/>
+      $$\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_k) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\\\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\\\ \theta_k + w_k t \end{bmatrix}$$
       * Control input: $\mathbf{u}_k = [v_k, w_k]^\top$
   * [2D pose estimation with off-centered GPS](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_off_centered.py)
     * Its _state variable_, _state transition function_, _state transition noise_, and _observation noise_ are same with [the above example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
