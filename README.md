@@ -1,7 +1,7 @@
 ## An Intuitive Tutorial on Bayesian Filtering
 ### Introduction
 This short tutorial aims to make readers understand Bayesian filtering intuitively. Instead of derivation of Kalman filter, I introduce Kalman filter from weighted average and moving average. I expect that readers will have intuition on Kalman filter such as meaning of equations.
-* Download [tutorial slides](https://github.com/mint-lab/filtering_tutorial/blob/master/filter_tutorial.pdf)
+* Download [tutorial slides](https://github.com/mint-lab/filtering_tutorial/blob/master/filtering_tutorial.pdf)
 * Download [example codes in a ZIP file](https://github.com/mint-lab/filtering_tutorial/archive/refs/heads/master.zip)
 * :memo: Please don't miss Roger Labbe's great book, [Kalman and Bayesian Filters in Python](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python)
 
