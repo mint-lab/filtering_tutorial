@@ -26,7 +26,7 @@ def Fx(state, dt):
         [0, 0,       0,      0,                1]])
 
 def hx(state):
-    x, y, _, _, _ = state.flatten()
+    x, y, *_ = state.flatten()
     return np.array([[x], [y]])
 
 def Hx(state):

@@ -15,7 +15,7 @@ def fx(state, dt):
         w]) # Note) UKF prefers to use horizontal vectors.
 
 def hx(state):
-    x, y, _, _, _ = state.flatten()
+    x, y, *_ = state.flatten()
     return np.array([x, y]) # Note) UKF prefers to use horizontal vectors.
 
 
