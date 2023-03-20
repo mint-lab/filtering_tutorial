@@ -24,7 +24,7 @@ This tutorial contains example applications to 2-D localization with various con
 * **[Kalman Filter](https://en.wikipedia.org/wiki/Kalman_filter)**
   * [1-D noisy signal filtering](https://github.com/mint-lab/filtering_tutorial/blob/master/kf_1d_signal.py)
     * State variable: $\mathbf{x} = x$
-    * State transition function: $\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_{k+1}) = \mathbf{x}_k$
+    * State transition function: $\mathbf{x}\_{k+1} = f(\mathbf{x}\_k; \mathbf{u}\_{k+1}) = \mathbf{x}\_k$
       * Control input: $\mathbf{u}_k = [ ]$
     * State transition noise: $\mathrm{Q} = \sigma^2_Q$
     * Observation function: $\mathbf{z} = h(\mathbf{x}) = \mathbf{x}$
@@ -32,7 +32,7 @@ This tutorial contains example applications to 2-D localization with various con
     * Observation noise: $\mathrm{R} = \sigma^2_{R}$
   * [2-D position tracking](https://github.com/mint-lab/filtering_tutorial/blob/master/kf_2d_position.py) (without class inheritance)
     * State variable: $\mathbf{x} = [x, y]^\top$
-    * State transition function: $\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_{k+1}) = \mathbf{x}_k$
+    * State transition function: $\mathbf{x}\_{k+1} = f(\mathbf{x}\_k; \mathbf{u}\_{k+1}) = \mathbf{x}\_k$
       * Control input: $\mathbf{u}_k = [ ]$
     * State transition noise: $\mathrm{Q} = \mathrm{diag}(\sigma^2_x, \sigma^2_y)$
     * Observation function: $\mathbf{z} = h(\mathbf{x}) = [x, y]^\top$
