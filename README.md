@@ -89,6 +89,11 @@ This tutorial contains example applications to 2-D localization with various con
 
 
 
+### Authors
+* [Sunglok Choi](https://mint-lab.github.io/sunglok/), [Hyunkil Hwang](https://github.com/Hyunkil76)
+
+
+
 ### Acknowledgement
 This tutorial was supported by the following R&D projects in Korea.
 *  AI-based Localization and Path Planning on 3D Building Surfaces (granted by [MSIT](https://www.msit.go.kr/)/[NRF](https://www.nrf.re.kr/), grant number: 2021M3C1C3096810)
