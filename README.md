@@ -2,7 +2,7 @@
 ### Introduction
 This short tutorial aims to make readers understand Bayesian filtering intuitively. Instead of derivation of Kalman filter, I introduce Kalman filter from weighted average and moving average. I expect that readers will have intuition on Kalman filter such as meaning of equations.
 * Download [tutorial slides](https://github.com/mint-lab/filtering_tutorial/blob/master/filtering_tutorial.pdf)
-* Download [example codes in a ZIP file](https://github.com/mint-lab/filtering_tutorial/archive/refs/heads/master.zip)
+* Download [example codes as a ZIP file](https://github.com/mint-lab/filtering_tutorial/archive/refs/heads/master.zip)
 * :memo: Please don't miss Roger Labbe's great book, [Kalman and Bayesian Filters in Python](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python)
 
 This tutorial contains example applications to 2-D localization with various conditions. It is important for users to know how to define the following five items in their applications. I hope that readers can build their intuition from my series of examples. My codes are based on [FilterPy](https://github.com/rlabbe/filterpy/), but their contents and your understanding may not be limited to the library.
@@ -43,7 +43,9 @@ This tutorial contains example applications to 2-D localization with various con
   * [2-D pose tracking with simple transition noise](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py) (without class inheritance)
     * State variable: $\mathbf{x} = [x, y, \theta, v, w]^\top$
     * State transition function: Constant velocity model (time interval: $t$)<p/>
-      $$\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_{k+1}) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\\\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\\\ \theta_k + w_k t \\\\ v_k \\\\ w_k \end{bmatrix}$$
+      ```math
+      \mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_{k+1}) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\\\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\\\ \theta_k + w_k t \\\\ v_k \\\\ w_k \end{bmatrix}
+      ```
       * Control input: $\mathbf{u}_k = [ ]$
     * State transition noise: $\mathrm{Q} = \mathrm{diag}(\sigma^2_x, \sigma^2_y, \sigma^2_\theta, \sigma^2_v, \sigma^2_w)$ 
     * Observation function: $\mathbf{z} = h(\mathbf{x}) = [x, y]^\top$
@@ -90,7 +92,8 @@ This tutorial contains example applications to 2-D localization with various con
 
 
 ### Authors
-* [Sunglok Choi](https://mint-lab.github.io/sunglok/), [Hyunkil Hwang](https://github.com/Hyunkil76)
+* [Sunglok Choi](https://mint-lab.github.io/sunglok/)
+* [Hyunkil Hwang](https://github.com/Hyunkil76)
 
 
 
