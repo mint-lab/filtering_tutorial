@@ -43,9 +43,7 @@ This tutorial contains example applications to 2-D localization with various con
   * [2-D pose tracking with simple transition noise](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py) (without class inheritance)
     * State variable: $\mathbf{x} = [x, y, \theta, v, w]^\top$
     * State transition function: Constant velocity model (time interval: $t$)<p/>
-      $$
-      \mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_{k+1}) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\ \theta_k + w_k t \\ v_k \\ w_k \end{bmatrix}
-      $$
+      * $$\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_{k+1}) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\ \theta_k + w_k t \\ v_k \\ w_k \end{bmatrix}$$
       * Control input: $\mathbf{u}_k = [ ]$
     * State transition noise: $\mathrm{Q} = \mathrm{diag}(\sigma^2_x, \sigma^2_y, \sigma^2_\theta, \sigma^2_v, \sigma^2_w)$ 
     * Observation function: $\mathbf{z} = h(\mathbf{x}) = [x, y]^\top$
