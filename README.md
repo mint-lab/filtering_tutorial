@@ -51,7 +51,7 @@ This tutorial contains example applications to **2-D localization (a.k.a. target
 ```math
 \mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_{k+1}) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\ \theta_k + w_k t \\ v_k \\ w_k \end{bmatrix}
 ```
-*  * State transition noise: $\mathrm{Q} = \mathrm{diag}(\sigma^2_x, \sigma^2_y, \sigma^2_\theta, \sigma^2_v, \sigma^2_w)$ 
+* * State transition noise: $\mathrm{Q} = \mathrm{diag}(\sigma^2_x, \sigma^2_y, \sigma^2_\theta, \sigma^2_v, \sigma^2_w)$ 
   * Observation function: $\mathbf{z} = h(\mathbf{x}) = [x, y]^\top$
     * Observation: $\mathbf{z} = [x_{GPS}, y_{GPS}]^\top$
   * Observation noise: $\mathrm{R} = \mathrm{diag}(\sigma^2_{GPS}, \sigma^2_{GPS})$
@@ -69,10 +69,10 @@ This tutorial contains example applications to **2-D localization (a.k.a. target
 ```math
 \mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_{k+1}) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\ \theta_k + w_k t \\ v_k \\ w_{max} \tanh{(w_k / w_{max})} \end{bmatrix}
 ```
-*  * Post-processing with **heading angle correction** [[Cho24]]()
+* * Post-processing with **heading angle correction** [[Cho24]]()
 ```math
 \mathbf{x}_k = \left\{ \begin{array}{ll}
-    [\bar{x}_k, \bar{y}_k, \theta_k+\pi, -v_k, w_k]^\top & \text{if} \;\; v_k < \epsilon_- \\
+    [x_k, y_k, \theta_k+\pi, -v_k, w_k]^\top & \text{if} \;\; v_k < \epsilon_- \\
     \mathbf{x}_k & \text{otherwise}
 \end{array} \right.
 ```
