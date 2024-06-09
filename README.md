@@ -48,10 +48,10 @@ This tutorial contains example applications to **2-D localization (a.k.a. target
   * State variable: $\mathbf{x} = [x, y, \theta, v, w]^\top$
   * State transition function: Constant velocity model (time interval: $t$)
     * Control input: $\mathbf{u}_k = [ ]$
-    ```math
-    \mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_{k+1}) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\ \theta_k + w_k t \\ v_k \\ w_k \end{bmatrix}
-    ```
-  * State transition noise: $\mathrm{Q} = \mathrm{diag}(\sigma^2_x, \sigma^2_y, \sigma^2_\theta, \sigma^2_v, \sigma^2_w)$ 
+```math
+\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_{k+1}) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\ \theta_k + w_k t \\ v_k \\ w_k \end{bmatrix}
+```
+*  * State transition noise: $\mathrm{Q} = \mathrm{diag}(\sigma^2_x, \sigma^2_y, \sigma^2_\theta, \sigma^2_v, \sigma^2_w)$ 
   * Observation function: $\mathbf{z} = h(\mathbf{x}) = [x, y]^\top$
     * Observation: $\mathbf{z} = [x_{GPS}, y_{GPS}]^\top$
   * Observation noise: $\mathrm{R} = \mathrm{diag}(\sigma^2_{GPS}, \sigma^2_{GPS})$
@@ -59,22 +59,22 @@ This tutorial contains example applications to **2-D localization (a.k.a. target
 * **2-D pose tracking** (_using_ class inheritance): [`ekf_2d_pose.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose.py)
   * Its _state variable_, _state transition function_, _observation function_, and _observation noise_ are same with [`ekf_2d_pose_simple_noise.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
   * State transition noise derived from **translational and rotational motion noises** ($\sigma_v^2$ and $\sigma_w^2$) [[Thrun05]](http://www.probabilistic-robotics.org/)
-    ```math
-    \mathrm{Q} = \mathrm{W}^\top \mathrm{M} \mathrm{W} \quad \text{where} \quad \mathrm{W} = \begin{bmatrix} \frac{\partial f}{\partial v} & \frac{\partial f}{\partial w} \end{bmatrix} \quad \text{and} \quad \mathrm{M} = \begin{bmatrix} \sigma^2_v & 0 \\ 0 & \sigma^2_w \end{bmatrix}
-    ```
+```math
+\mathrm{Q} = \mathrm{W}^\top \mathrm{M} \mathrm{W} \quad \text{where} \quad \mathrm{W} = \begin{bmatrix} \frac{\partial f}{\partial v} & \frac{\partial f}{\partial w} \end{bmatrix} \quad \text{and} \quad \mathrm{M} = \begin{bmatrix} \sigma^2_v & 0 \\ 0 & \sigma^2_w \end{bmatrix}
+```
 
 * **2-D pose tracking with [two velocity constraints]()**: [`ekf_2d_pose_vel_constraints.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_vel_constraints.py)
   * Its _state variable_, _state transition noise_, _observation function_, and _observation noise_ are same with [`ekf_2d_pose.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose.py).
-  * State transition function with **angular rate saturation** [[Under Review]]()
+  * State transition function with **angular rate saturation** [[Cho24]]()
 ```math
 \mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_{k+1}) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\ \theta_k + w_k t \\ v_k \\ w_{max} \tanh{(w_k / w_{max})} \end{bmatrix}
 ```
-*  * Post-processing with **heading angle correction** [[Under Review]]()
+*  * Post-processing with **heading angle correction** [[Cho24]]()
 ```math
 \mathbf{x}_k = \left\{ \begin{array}{ll}
     [\bar{x}_k, \bar{y}_k, \theta_k+\pi, -v_k, w_k]^\top & \text{if} \;\; v_k < \epsilon_- \\
     \mathbf{x}_k & \text{otherwise}
-\end{array}
+\end{array} \right.
 ```
 
 * **2-D pose tracking with odometry**: [`ekf_2d_pose_odometry.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_odometry.py)
@@ -115,6 +115,31 @@ This tutorial contains example applications to **2-D localization (a.k.a. target
   * [Monte Carlo Particle Filter for Localization](https://github.com/p16i/particle-filter), Pattarawat Chormai
   * [particle_filter_demo](https://github.com/mjl/particle_filter_demo), Martin J. Laubach
   * [Particle Filter for _Turtle_ Localization](https://github.com/leimao/Particle-Filter), Lei Mao
+
+
+
+## How to Cite
+If you want to cite this tutorial and codes, please cite one of the following papers.
+
+```bibtex
+@article{Cho24,
+    author      = {Se-Hyoung Cho and Sunglok Choi},
+    title       = {Accurate and Resilient {GPS}-only Localization with Velocity Constraints},
+    journal     = {IEEE Access (Under Review)},
+}
+```
+
+```bibtex
+@article{Choi20,
+    author      = {Sunglok Choi and Jong-Hwan Kim},
+    title       = {Leveraging Localization Accuracy with Off-centered {GPS}},
+    journal     = {IEEE Transactions on Intelligent Transportation Systems},
+    volume      = {21},
+    number      = {6},
+    year        = {2020},
+    doi         = {10.1109/TITS.2019.2915108}
+}
+```
 
 
 
