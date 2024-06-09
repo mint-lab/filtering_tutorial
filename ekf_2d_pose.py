@@ -56,7 +56,7 @@ def plot_results(localizer_name, truth, state, obser=None, covar=None, covar_ste
         covar = np.array(covar)
     state_dim = len(state[0]) - 1
 
-    plt.figure()
+    plt.figure('XY')
     plt.plot(truth[:,1], truth[:,2], 'r-', label='Truth')
     if obser is not None:
         plt.plot(obser[:,1], obser[:,2], 'b+', label='Observation')
@@ -71,7 +71,7 @@ def plot_results(localizer_name, truth, state, obser=None, covar=None, covar_ste
     plt.grid()
     plt.legend()
 
-    plt.figure()
+    plt.figure('Time-X')
     plt.plot(truth[:,0], truth[:,1], 'r-', label='Truth')
     if obser is not None:
         plt.plot(obser[:,0], obser[:,1], 'b+', label='Observation')
@@ -81,7 +81,7 @@ def plot_results(localizer_name, truth, state, obser=None, covar=None, covar_ste
     plt.grid()
     plt.legend()
 
-    plt.figure()
+    plt.figure('Time-Y')
     plt.plot(truth[:,0], truth[:,2], 'r-', label='Truth')
     if obser is not None:
         plt.plot(obser[:,0], obser[:,2], 'b+', label='Observation')
@@ -92,7 +92,7 @@ def plot_results(localizer_name, truth, state, obser=None, covar=None, covar_ste
     plt.legend()
 
     if state_dim >= 3:
-        plt.figure()
+        plt.figure('Time-Theta')
         plt.plot(truth[:,0], np.rad2deg(truth[:,3]), 'r-', label='Truth')
         plt.plot(state[:,0], np.rad2deg(state[:,3]), 'g-', label=localizer_name)
         plt.xlabel('Time [sec]')
@@ -101,7 +101,7 @@ def plot_results(localizer_name, truth, state, obser=None, covar=None, covar_ste
         plt.legend()
 
     if state_dim >= 4:
-        plt.figure()
+        plt.figure('Time-V')
         plt.plot(truth[:,0], truth[:,4], 'r-', label='Truth')
         plt.plot(state[:,0], state[:,4], 'g-', label=localizer_name)
         plt.xlabel('Time [sec]')
@@ -110,7 +110,7 @@ def plot_results(localizer_name, truth, state, obser=None, covar=None, covar_ste
         plt.legend()
 
     if state_dim >= 5:
-        plt.figure()
+        plt.figure('Time-W')
         plt.plot(truth[:,0], np.rad2deg(truth[:,5]), 'r-', label='Truth')
         plt.plot(state[:,0], np.rad2deg(state[:,5]), 'g-', label=localizer_name)
         plt.xlabel('Time [sec]')

@@ -8,7 +8,7 @@ This short tutorial aims to make readers understand Bayesian filtering intuitive
 * To see the lecture slides: [Click here](https://github.com/mint-lab/filtering_tutorial/blob/master/slides/filtering_tutorial.pdf)
 * :memo: Please don't miss Roger Labbe's great book, [Kalman and Bayesian Filters in Python](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python)
 
-This tutorial contains example applications to 2-D localization with various conditions. It is important for users to know how to define the following five items in their applications. I hope that readers can build their intuition from my series of examples. My codes are based on [FilterPy](https://github.com/rlabbe/filterpy/), but their contents and your understanding may not be limited to the library.
+This tutorial contains example applications to **2-D localization (a.k.a. target tracking) with various conditions and situations**. It is important for users to know how to define the following five items in their applications. I hope that readers can build their intuition from my series of examples. My codes are based on [FilterPy](https://github.com/rlabbe/filterpy/), but their contents and your understanding may not be limited to the library.
 1. State variable
 1. State transition function
 1. State transition noise
@@ -19,12 +19,13 @@ This tutorial contains example applications to 2-D localization with various con
 
 ## Code Examples
 ### 1) From Weighted and Moving Average to Simple 1-D Kalman Filter
-* Merging two weight measurements
-* Merging two weight measurements with their variance ([inverse-variance weighted average](https://en.wikipedia.org/wiki/Inverse-variance_weighting))
-* [1-D noisy signal filtering](https://github.com/mint-lab/filtering_tutorial/blob/master/ema_1d_signal.py) (with [exponential moving average](https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average))
-* [1-D noisy signal filtering](https://github.com/mint-lab/filtering_tutorial/blob/master/ema_1d_signal.py) (with simple 1-D Kalman filter)
+* **Merging two weight measurements**
+* **Merging two weight measurements with their variance** ([inverse-variance weighted average](https://en.wikipedia.org/wiki/Inverse-variance_weighting))
+* **1-D noisy signal filtering with [exponential moving average](https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average)**: [`ema_1d_signal.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ema_1d_signal.py)
+* **1-D noisy signal filtering with simple 1-D Kalman filter**: [`simple_kf_1d_signal.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/simple_kf_1d_signal.py)
+
 ### 2) [Kalman Filter](https://en.wikipedia.org/wiki/Kalman_filter)
-* [1-D noisy signal filtering](https://github.com/mint-lab/filtering_tutorial/blob/master/kf_1d_signal.py)
+* **1-D noisy signal filtering**: [`kf_1d_signal.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/kf_1d_signal.py)
   * State variable: $\mathbf{x} = x$
   * State transition function: $\mathbf{x}\_{k+1} = f(\mathbf{x}\_k; \mathbf{u}\_{k+1}) = \mathbf{x}\_k$
     * Control input: $\mathbf{u}_k = [ ]$
@@ -33,7 +34,7 @@ This tutorial contains example applications to 2-D localization with various con
     * Observation: 1-D signal value
   * Observation noise: $\mathrm{R} = \sigma^2_{R}$
 
-* [2-D position tracking](https://github.com/mint-lab/filtering_tutorial/blob/master/kf_2d_position.py) (without class inheritance)
+* **2-D position tracking** (_without_ class inheritance): [`kf_2d_position.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/kf_2d_position.py)
   * State variable: $\mathbf{x} = [x, y]^\top$
   * State transition function: $\mathbf{x}\_{k+1} = f(\mathbf{x}\_k; \mathbf{u}\_{k+1}) = \mathbf{x}\_k$
     * Control input: $\mathbf{u}_k = [ ]$
@@ -43,50 +44,64 @@ This tutorial contains example applications to 2-D localization with various con
   * Observation noise: $\mathrm{R} = \mathrm{diag}(\sigma^2_{GPS}, \sigma^2_{GPS})$
 
 ### 3) [Extended Kalman Filter](https://en.wikipedia.org/wiki/Extended_Kalman_filter) (EKF)
-* [2-D pose tracking with simple transition noise](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py) (without class inheritance)
+* **2-D pose tracking with simple transition noise** (_without_ class inheritance): [`ekf_2d_pose_simple_noise.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py)
   * State variable: $\mathbf{x} = [x, y, \theta, v, w]^\top$
   * State transition function: Constant velocity model (time interval: $t$)
     * Control input: $\mathbf{u}_k = [ ]$
-```math
-\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_{k+1}) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\ \theta_k + w_k t \\ v_k \\ w_k \end{bmatrix}
-```
-* * State transition noise: $\mathrm{Q} = \mathrm{diag}(\sigma^2_x, \sigma^2_y, \sigma^2_\theta, \sigma^2_v, \sigma^2_w)$ 
+    ```math
+    \mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_{k+1}) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\ \theta_k + w_k t \\ v_k \\ w_k \end{bmatrix}
+    ```
+  * State transition noise: $\mathrm{Q} = \mathrm{diag}(\sigma^2_x, \sigma^2_y, \sigma^2_\theta, \sigma^2_v, \sigma^2_w)$ 
   * Observation function: $\mathbf{z} = h(\mathbf{x}) = [x, y]^\top$
     * Observation: $\mathbf{z} = [x_{GPS}, y_{GPS}]^\top$
   * Observation noise: $\mathrm{R} = \mathrm{diag}(\sigma^2_{GPS}, \sigma^2_{GPS})$
 
-* [2-D pose tracking](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose.py) (using class inheritance)
-  * Its _state variable_, _state transition function_, _observation function_, and _observation noise_ are same with [the above example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
-  * State transition noise
+* **2-D pose tracking** (_using_ class inheritance): [`ekf_2d_pose.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose.py)
+  * Its _state variable_, _state transition function_, _observation function_, and _observation noise_ are same with [`ekf_2d_pose_simple_noise.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
+  * State transition noise derived from **translational and rotational motion noises** ($\sigma_v^2$ and $\sigma_w^2$) [[Thrun05]](http://www.probabilistic-robotics.org/)
+    ```math
+    \mathrm{Q} = \mathrm{W}^\top \mathrm{M} \mathrm{W} \quad \text{where} \quad \mathrm{W} = \begin{bmatrix} \frac{\partial f}{\partial v} & \frac{\partial f}{\partial w} \end{bmatrix} \quad \text{and} \quad \mathrm{M} = \begin{bmatrix} \sigma^2_v & 0 \\ 0 & \sigma^2_w \end{bmatrix}
+    ```
+
+* **2-D pose tracking with [two velocity constraints]()**: [`ekf_2d_pose_vel_constraints.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_vel_constraints.py)
+  * Its _state variable_, _state transition noise_, _observation function_, and _observation noise_ are same with [`ekf_2d_pose.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose.py).
+  * State transition function with **angular rate saturation** [[Under Review]]()
 ```math
-\mathrm{Q} = \mathrm{W}^\top \mathrm{M} \mathrm{W} \quad \text{where} \quad \mathrm{W} = \begin{bmatrix} \frac{\partial f}{\partial v} & \frac{\partial f}{\partial w} \end{bmatrix} \quad \text{and} \quad \mathrm{M} = \begin{bmatrix} \sigma^2_v & 0 \\ 0 & \sigma^2_w \end{bmatrix}
+\mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_{k+1}) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\ \theta_k + w_k t \\ v_k \\ w_{max} \tanh{(w_k / w_{max})} \end{bmatrix}
+```
+*  * Post-processing with **heading angle correction** [[Under Review]]()
+```math
+\mathbf{x}_k = \left\{ \begin{array}{ll}
+    [\bar{x}_k, \bar{y}_k, \theta_k+\pi, -v_k, w_k]^\top & \text{if} \;\; v_k < \epsilon_- \\
+    \mathbf{x}_k & \text{otherwise}
+\end{array}
 ```
 
-* [2-D pose tracking with odometry](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_odometry.py)
-  * Its _state transition noise_, _observation function_, and _observation noise_ are same with [the above example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose.py).
+* **2-D pose tracking with odometry**: [`ekf_2d_pose_odometry.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_odometry.py)
+  * Its _state transition noise_, _observation function_, and _observation noise_ are same with [`ekf_2d_pose.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose.py).
   * State variable: $\mathbf{x} = [x, y, \theta]^\top$
-  * State transition function: Constant velocity model (time interval: $t$)
+  * State transition function with **translational and rotational control inputs**: Constant velocity model (time interval: $t$)
     * Control input: $\mathbf{u}_k = [v_k, w_k]^\top$
 ```math
 \mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_{k+1}) = \begin{bmatrix} x_k + v_{k+1} t \cos(\theta_k + w_{k+1} t / 2) \\ y_k + v_{k+1} t \sin(\theta_k + w_{k+1} t / 2) \\ \theta_k + w_{k+1} t \end{bmatrix}
 ```
 
-* [2-D pose tracking with off-centered GPS](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_off_centered.py)
-  * Its _state variable_, _state transition function_, _state transition noise_, and _observation noise_ are same with [the above example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose.py).
-  * Observation function [[Choi20]](http://doi.org/10.1109/TITS.2019.2915108): Off-centered GPS ( $o_x$ and $o_y$ are frontal and lateral offset of the GPS.)<p/>
+* **2-D pose tracking with [off-centered GPS](http://doi.org/10.1109/TITS.2019.2915108)**: [`ekf_2d_pose_off_centered.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_off_centered.py)
+  * Its _state variable_, _state transition function_, _state transition noise_, and _observation noise_ are same with [`ekf_2d_pose.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose.py).
+  * Observation function with off-centered GPS [[Choi20]](http://doi.org/10.1109/TITS.2019.2915108): Off-centered GPS ( $o_x$ and $o_y$ are frontal and lateral offset of the GPS.)<p/>
 ```math
 \mathbf{z} = \begin{bmatrix} x_{GPS} \\ y_{GPS} \end{bmatrix} = h(\mathbf{x}) = \begin{bmatrix} x + o_x \cos \theta - o_y \sin \theta \\ y + o_x \sin \theta + o_y \cos \theta \end{bmatrix}
 ```
 
 ### 4) [Unscented Kalman Filter](https://en.wikipedia.org/wiki/Kalman_filter#Unscented_Kalman_filter) (UKF)
-* [2-D pose tracking with simple transition noise](https://github.com/mint-lab/filtering_tutorial/blob/master/ukf_2d_pose_simple_noise.py)
-  * Its five definitions (and also implementation style) are same with [its corresponding EKF example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
-* [2D pose tracking](https://github.com/mint-lab/filtering_tutorial/blob/master/ukf_2d_pose.py)
-  * Its five definitions (and also implementation style) are same with [its corresponding EKF example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose.py).
+* **2-D pose tracking with simple transition noise**: [`ukf_2d_pose_simple_noise.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ukf_2d_pose_simple_noise.py)
+  * Its five definitions (and also implementation style) are same with [`ekf_2d_pose_simple_noise.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_simple_noise.py).
+* **2D pose tracking**: [`ukf_2d_pose.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ukf_2d_pose.py)
+  * Its five definitions (and also implementation style) are same with [`ekf_2d_pose.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose.py).
 
 ### 5) [Particle Filter](https://en.wikipedia.org/wiki/Particle_filter)
-* [2-D pose tracking](https://github.com/mint-lab/filtering_tutorial/blob/master/pf_2d_pose.py)
-  * Its five definitions (and also implementation style) are same with [its corresponding EKF example](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose.py).
+* **2-D pose tracking**: [`pf_2d_pose.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/pf_2d_pose.py)
+  * Its five definitions (and also implementation style) are same with [`ekf_2d_pose.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose.py).
 
 
 
