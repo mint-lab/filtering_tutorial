@@ -65,11 +65,11 @@ This tutorial contains example applications to **2-D localization (a.k.a. target
 
 * **2-D pose tracking with [two velocity constraints]()**: [`ekf_2d_pose_vel_constraints.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose_vel_constraints.py)
   * Its _state variable_, _state transition noise_, _observation function_, and _observation noise_ are same with [`ekf_2d_pose.py`](https://github.com/mint-lab/filtering_tutorial/blob/master/ekf_2d_pose.py).
-  * State transition function with **angular rate saturation** [[Cho24]]()
+  * State transition function with **angular rate saturation** [[Cho24]](http://doi.org/10.1109/ACCESS.2024.3432335)
 ```math
 \mathbf{x}_{k+1} = f(\mathbf{x}_k; \mathbf{u}_{k+1}) = \begin{bmatrix} x_k + v_k t \cos(\theta_k + w_k t / 2) \\ y_k + v_k t \sin(\theta_k + w_k t / 2) \\ \theta_k + w_k t \\ v_k \\ w_{max} \tanh{(w_k / w_{max})} \end{bmatrix}
 ```
-* * Post-processing with **heading angle correction** [[Cho24]]()
+* * Post-processing with **heading angle correction** [[Cho24]](http://doi.org/10.1109/ACCESS.2024.3432335)
 ```math
 \mathbf{x}_k = \left\{ \begin{array}{ll}
     [x_k, y_k, \theta_k+\pi, -v_k, w_k]^\top & \text{if} \;\; v_k < \epsilon_- \\
@@ -125,7 +125,10 @@ If you want to cite this tutorial and codes, please cite one of the following pa
 @article{Cho24,
     author      = {Se-Hyoung Cho and Sunglok Choi},
     title       = {Accurate and Resilient {GPS}-only Localization with Velocity Constraints},
-    journal     = {IEEE Access (Under Review)},
+    journal     = {IEEE Access},
+    volume      = {12},
+    year        = {2024},
+    doi         = {10.1109/ACCESS.2024.3432335}
 }
 ```
 
